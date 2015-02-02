@@ -12,7 +12,6 @@ CREATE TABLE customers (
   id INTEGER PRIMARY KEY,
   name TEXT,
   email TEXT,
-  password TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
