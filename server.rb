@@ -60,7 +60,12 @@ post '/purchased/:id' do
 
     findShirtData.update(inventory_hash)
 
-    redirect '/'
+    currentPurchase = Purchases.last()
+    shirtInfo = Inventory.find_by(currentPurchase.shirt_id)
+    customerInfo = Customers.find_by(currentPurchase.customer_id)
+
+    erb :confirmation, locals: {purchaseInfo: currentPurchase, shirtInfo: shirtInfo, customerInfo: customerInfo}
+
   elsif idCheck != nil
     findCustomer = Customers.find_by({email: email})
 
@@ -84,7 +89,11 @@ post '/purchased/:id' do
 
     findShirtData.update(inventory_hash)
 
-    redirect '/'
+    currentPurchase = Purchases.last()
+    shirtInfo = Inventory.find_by(currentPurchase.shirt_id)
+    customerInfo = Customers.find_by(currentPurchase.customer_id)
+
+    erb :confirmation, locals: {purchaseInfo: currentPurchase, shirtInfo: shirtInfo, customerInfo: customerInfo}
   end
 end
 
