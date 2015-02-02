@@ -13,3 +13,8 @@ end
 get '/' do
   erb :index, locals: { inventory: Inventory.all() }
 end
+
+get '/shirt/:id' do
+  selectedShirt = params[:id]
+  erb :show, locals: {shirt: selectedShirt}
+end
