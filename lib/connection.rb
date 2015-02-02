@@ -5,4 +5,4 @@ ActiveRecord::Base.establish_connection({
   :database => "shirts.db"
   })
 
-  ActiveRecord::Base.logger = Logger.new(STDOUT)
+ActiveRecord::Base.logger = Logger.new(STDOUT)
