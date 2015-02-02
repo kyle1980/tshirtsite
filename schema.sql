@@ -1,4 +1,4 @@
-CREATE TABLE inventory (
+CREATE TABLE inventories (
   id INTEGER PRIMARY KEY,
   item TEXT,
   price INTEGER,
