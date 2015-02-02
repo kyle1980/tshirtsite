@@ -1,5 +1,5 @@
 require 'active_record'
 
-class Inventory < ActiveRecord::Base
+class Customers < ActiveRecord::Base
   has_many :purchases
 end

@@ -1,6 +1,7 @@
 require_relative './lib/connection'
 require_relative './lib/purchases'
 require_relative './lib/inventory'
+require_relative './lib/customers'
 
 
 Inventory.create({

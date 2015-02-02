@@ -3,6 +3,34 @@
     <title></title>
   </head>
   <body>
-    <h1><%= shirt %></h1>
+    <div class="container">
+
+      <div class="row">
+        <div class="col-md-2 col-md-offset-5">
+          <h2><%= shirt.item %></h2>
+        </div>
+      </div>
+
+      <div class="row">
+
+        <div class="col-md-6">
+          <img src="<%= shirt.url %>"/>
+          <p><%= shirt.quantity %></p>
+        </div>
+
+        <div class="col-md-6">
+          <h3>Purchase:</h3>
+          <form action="/purchased/<%= shirt.id %>" method="POST">
+            <input type="text" name="name" placeholder="name" required>
+            <input type="number" name="quantity" placeholder="quantity" required>
+            <input type="email" name="email" placeholder="email" required>
+            <button>Purchase</button>
+          </form>
+        </div>
+
+      </div>
+
+    </div>
+
   </body>
 </html>
