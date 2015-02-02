@@ -29,11 +29,8 @@ post '/purchased/:id' do
   quantity = params["quantity"]
   # userCheck = shirts_db.execute("SELECT 1 FROM customers WHERE email = ?", params["email"].length > 0)
 
-  emailCheck = Customers.find_by({email: email})
-  newEmail = emailCheck.email
-  userCheck = newEmail.length > 0
-
-  if userCheck == false
+  idCheck = Customers.find_by({email: email})
+  if idCheck == nil
     customer_hash = {
       name: params["name"],
       email: params["email"]
@@ -64,7 +61,7 @@ post '/purchased/:id' do
     findShirtData.update(inventory_hash)
 
     redirect '/'
-  elsif userCheck == true
+  elsif idCheck != nil
     findCustomer = Customers.find_by({email: email})
 
     purchase_hash ={

@@ -22,10 +22,14 @@
         </div>
         <div class="col-md-6">
           <h4>Price: $<%= item.price %></h4>
-          <h4>Quantity Available: <%= item.quantity %></h4>
-          <form action="/shirt/<%= item.id %>" method="GET">
-            <button>BUY</button>
-          </form>
+          <% if item.quantity > 0 %>
+            <h4>Quantity Available: <%= item.quantity %></h4>
+            <form action="/shirt/<%= item.id %>" method="GET">
+              <button>BUY</button>
+            </form>
+          <% else %>
+            <h2>SOLD OUT!!!!!</h2>
+          <% end %>
         </div>
       </div>
     <% end %>
