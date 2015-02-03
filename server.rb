@@ -121,6 +121,13 @@ post '/update/:id' do
   redirect '/admin'
 end
 
+post '/delete/:id' do
+  id = params[:id]
+  Inventory.delete(id)
+
+  redirect '/admin'
+end
+
 post '/createItem' do
   item = params["item"]
   price = params["price"]
