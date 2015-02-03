@@ -13,7 +13,6 @@ after do
 end
 
 get '/' do
-
   erb :index, locals: { inventory: Inventory.all() }
 end
 
@@ -21,7 +20,6 @@ get '/shirt/:id' do
   id = params[:id]
   selectedShirt = Inventory.find(id)
   erb :show, locals: {shirt: selectedShirt}
-
 end
 
 post '/purchased/:id' do
@@ -31,10 +29,8 @@ post '/purchased/:id' do
   quantity = params["quantity"]
   # userCheck = shirts_db.execute("SELECT 1 FROM customers WHERE email = ?", params["email"].length > 0)
 
-
   idCheck = Customers.find_by({email: email})
   if idCheck == nil
-
     customer_hash = {
       name: params["name"],
       email: params["email"]
@@ -64,10 +60,13 @@ post '/purchased/:id' do
 
     findShirtData.update(inventory_hash)
 
-    redirect '/'
+    currentPurchase = Purchases.last()
+    shirtInfo = Inventory.find_by(currentPurchase.shirt_id)
+    customerInfo = Customers.find_by(currentPurchase.customer_id)
+
+    erb :confirmation, locals: {purchaseInfo: currentPurchase, shirtInfo: shirtInfo, customerInfo: customerInfo}
 
   elsif idCheck != nil
-
     findCustomer = Customers.find_by({email: email})
 
     purchase_hash ={
@@ -90,7 +89,11 @@ post '/purchased/:id' do
 
     findShirtData.update(inventory_hash)
 
-    redirect '/'
+    currentPurchase = Purchases.last()
+    shirtInfo = Inventory.find_by(currentPurchase.shirt_id)
+    customerInfo = Customers.find_by(currentPurchase.customer_id)
+
+    erb :confirmation, locals: {purchaseInfo: currentPurchase, shirtInfo: shirtInfo, customerInfo: customerInfo}
   end
 end
 
@@ -114,6 +117,13 @@ post '/update/:id' do
   }
 
   findShirtData.update(inventory_hash)
+
+  redirect '/admin'
+end
+
+post '/delete/:id' do
+  id = params[:id]
+  Inventory.delete(id)
 
   redirect '/admin'
 end
