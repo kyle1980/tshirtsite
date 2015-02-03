@@ -1,6 +1,9 @@
 <html>
   <head>
     <title></title>
+  <style>
+    input[type="number"] {width: 65px;}
+  </style>
   </head>
   <body>
 
@@ -16,14 +19,14 @@
 
         <div class="col-md-6">
           <img src="<%= shirt.url %>"/>
-          <p><%= shirt.quantity %></p>
+          <p>Quantity available: <%= shirt.quantity %></p>
         </div>
 
         <div class="col-md-6">
           <h3>Purchase:</h3>
           <form action="/purchased/<%= shirt.id %>" method="POST">
             <input type="text" name="name" placeholder="name" required>
-            <input type="number" name="quantity" placeholder="quantity" required>
+            <input type="number" name="quantity" placeholder="quantity" min="1" max="<%= shirt.quantity %>" width="65px" required>
             <input type="email" name="email" placeholder="email" required>
             <button>Purchase</button>
           </form>
