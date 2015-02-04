@@ -2,6 +2,7 @@ require 'pry'
 require 'sinatra'
 require 'sinatra/reloader'
 require 'json'
+require 'bcrypt'
 require_relative './lib/connection'
 require_relative './lib/purchases'
 require_relative './lib/inventory'
@@ -27,19 +28,22 @@ get '/' do
   end
 end
 
-get '/login' do
+post '/login' do
   username = params["username"]
   password = params["password"]
-  userCheck = Customer.find_by({name: username, password: password})
+  userCheck = Customer.find_by({name: username})
+  puts userCheck
+
   if userCheck != nil
-    session[:valid_user] = true
-    session[:username] = username
-    puts session[:username]
-    session[:cart] = []
-    redirect '/'
-  elsif userCheck == nil
-    redirect '/login'
+    if BCrypt::Password.new(userCheck.password) == params["password"]
+      session[:valid_user] = true
+      session[:username] = username
+      puts session[:username]
+      session[:cart] = []
+    end
   end
+
+  redirect '/'
 end
 
 post '/signup' do
@@ -49,9 +53,11 @@ post '/signup' do
   email = params["email"]
 
   if password == confirmPassword
+    my_password = BCrypt::Password.create(params["password"])
+    puts my_password
     customer_hash = {
         name: username,
-        password: password,
+        password: my_password,
         email: email
       }
     Customer.create(customer_hash);
@@ -159,7 +165,7 @@ end
 # end
 
 get '/admin' do
-  erb :admin, locals: {purchases: Purchases.all(), inventory: Inventory.all()}
+  erb :admin, locals: {purchases: Purchase.all(), inventory: Inventory.all()}
 end
 
 post '/update/:id' do
