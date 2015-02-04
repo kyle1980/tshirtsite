@@ -5,18 +5,41 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta charset="UTF-8">
-  <title>Houses</title>
+  <title></title>
   <style>
+  /*.container {display: inline-f;}
+  .shirts {margin: auto;}*/
   h2 {text-align: center;}
   img {width: 300px}
+  footer {height: 100px}
   </style>
 </head>
 <body>
-  <h1>shirts:</h1>
+  <div class="row">
+    <div class="col-md-2 col-md-offset-3">
+      <h1>shirts:</h1>
+    </div>
+    <div class="col-md-2 col-md-offset-1">
+      <form action="/orders" method="get">
+        <button>Orders</button>
+      </form>
+    </div>
+    <div class="col-md-1">
+      <form action="/checkout" method="post">
+        <button>Checkout <%= session[:cart].length %></button>
+      </form>
+    </div>
+    <div class="col-md-2 col-md-offset-1">
+      <form action="/logout" method="get">
+        <button>LOGOUT</button>
+      </form>
+    </div>
+  </div>
+
   <div class="container">
     <% inventory.each do |item| %>
       <!-- <div class="row"> -->
-        <div class="col-md-4">
+        <div class="col-md-4 shirts">
           <h2><%= item.item %></h2>
           <img src="<%= item.url %>">
           <h4>Price: $<%= item.price %></h4>
@@ -32,6 +55,8 @@
       <!-- </div> -->
     <% end %>
   </div>
+  <footer>
+  </footer>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 </body>

@@ -1,6 +1,9 @@
 
-
-              
-              <p>Shirt: <%= shirtInfo.item %></p>
-              <p>Quantity: <%= purchaseInfo.quantity %></p>
-              <p>Email: <%= customerInfo.email %></p>
+<p>You Bought:</p>
+<% session[:cart].each do |hash| %>
+<div class="row">
+  <p>Shirt: <%= hash[:item] %></p>
+  <p>Quantity: <%= hash[:quantity] %></p>
+  <p>price: <%= hash[:price].to_i * hash[:quantity].to_i %></p>
+</div>
+<% end %>

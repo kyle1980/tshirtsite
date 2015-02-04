@@ -11,6 +11,7 @@ CREATE TABLE inventories (
 CREATE TABLE customers (
   id INTEGER PRIMARY KEY,
   name TEXT,
+  password TEXT,
   email TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

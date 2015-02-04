@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+<body>
+  <h1>Purchases:</h1>
+  <div class="row">
+    <div class="col-md-2">
+      <p>Shirt ID:</p>
+    </div>
+    <div class="col-md-2">
+      <p>Quantity:</p>
+    </div>
+  </div>
+  <div class="container">
+    <% orders.each do |order| %>
+
+      <div class="row">
+        <div class="col-md-2">
+          <p><%= order.shirt_id %></p>
+        </div>
+        <div class="col-md-2">
+          <p><%= order.quantity %></p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  </body>
+  </html>

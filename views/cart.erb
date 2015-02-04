@@ -1,0 +1,81 @@
+<html>
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <title></title>
+  <style>
+  input[type="number"] {width: 65px;}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Your Cart:</h1>
+    <% session[:cart].each do |hash| %>
+    <div class="row">
+      <p>Shirt: <%= hash[:item] %></p>
+      <p>Quantity: <%= hash[:quantity] %></p>
+      <p>price: <%= hash[:price].to_i * hash[:quantity].to_i %></p>
+      <form action="/deleteCartItem/<%= session[:cart].index(hash) %>" method="get">
+        <button>delete</button>
+      </form>
+    </div>
+    <% end %>
+    <!-- <form action="/purchase" method="post"> -->
+    <button id="purchase" type="button" class="btn btn-danger" data-toggle="modal" data-target = "#confirmation">Confirm Purchase</button>
+    <!-- </form> -->
+    <div class="modal fade" id="confirmation">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">Congrats! Your purchase went though!</h4>
+          </div>
+          <div class="modal-body">
+
+            <div id = "buyCheck" class="row">
+            </div>
+
+            <form action="/" method="GET">
+              <button>BACK TO HOME</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+
+  <script>
+    var purchase = document.getElementById("purchase");
+    var buyCheck = document.getElementById("buyCheck");
+
+    var xhr = new XMLHttpRequest;
+
+    purchase.addEventListener("click" , function(){
+      console.log("click")
+      xhr.open("POST" , "/purchase");
+      xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+      xhr.addEventListener("load" , function(req,res){
+        console.log("info back")
+        buyCheck.innerHTML = xhr.responseText;
+        console.log(xhr.responseText)
+
+
+      })
+      console.log("sent")
+
+
+
+
+      xhr.send();
+
+    })
+  </script>
+
+</body>
+</html>
