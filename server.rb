@@ -168,14 +168,14 @@ post '/createItem' do
   redirect '/admin'
 end
 
-get '/purchase' do
-  puts "purchase confirm attempt"
-  currentPurchase = Purchases.last()
-  shirtInfo = Inventory.find_by(currentPurchase.shirt_id)
-  customerInfo = Customers.find_by(currentPurchase.customer_id)
-  puts currentPurchase
-  puts shirtInfo
-  puts currentInfo
-  erb :confirmation, locals: {purchaseInfo: currentPurchase, shirtInfo: shirtInfo, customerInfo: customerInfo}
-
-end
+# get '/purchase' do
+#   puts "purchase confirm attempt"
+#   currentPurchase = Purchases.last()
+#   shirtInfo = Inventory.find_by(currentPurchase.shirt_id)
+#   customerInfo = Customers.find_by(currentPurchase.customer_id)
+#   # puts currentPurchase
+#   # puts shirtInfo
+#   # puts currentInfo
+#   erb :confirmation, locals: {purchaseInfo: currentPurchase, shirtInfo: shirtInfo, customerInfo: customerInfo}
+#
+# end
