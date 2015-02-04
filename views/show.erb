@@ -28,21 +28,90 @@
 
         <div class="col-md-6">
           <h3>Purchase:</h3>
-          <form action="/purchased/<%= shirt.id %>" method="POST">
-            <input type="text" name="name" placeholder="name" required>
-            <input type="number" name="quantity" placeholder="quantity" min="1" max="<%= shirt.quantity %>" width="65px" required>
-            <input type="email" name="email" placeholder="email" required>
-            <button>Purchase</button>
-          </form>
+
+            <input type="text" id="name" placeholder="name" required>
+            <input type="number" id="quantity" placeholder="quantity" min="1" max="<%= shirt.quantity %>" width="65px" required>
+            <input type="email" id="email" placeholder="email" required>
+            <button id="purchase" type="button" class="btn btn-danger" data-toggle="modal" data-target = "#confirmation">Purchase</button>
+
         </div>
 
       </div>
+      <div class="modal fade" id="confirmation">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title" id="myModalLabel">Congrats! Your purchase went though!</h4>
+            </div>
+            <div class="modal-body">
+              <p>Order Summary:</p>
+              <div id = "buyCheck" class="row">
+              </div>
 
+              <form action="/" method="GET">
+                <button>BACK TO HOME</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
 
 
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+  <script>
+  var purchase = document.getElementById("purchase");
+  var buyCheck = document.getElementById("buyCheck");
+  var nameF = document.getElementById("name");
+  var emailF = document.getElementById("email");
+  var quantityF = document.getElementById("quantity");
+  var sId = "<%= shirt.id %>"
+  var xhr = new XMLHttpRequest;
+
+  purchase.addEventListener("click" , function(){
+    xhr.open("POST" , "/purchased/<%= shirt.id %>");
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.addEventListener("load" , function(req,res){
+      console.log("info back")
+      buyCheck.innerHTML = xhr.responseText;
+      console.log(xhr.responseText)
+
+
+    })
+    console.log("sent")
+    var orderOut = {
+      name : nameF.value,
+      email : emailF.value,
+      quantity : quantityF.value
+    }
+    console.log(orderOut);
+
+
+    xhr.send(JSON.stringify(orderOut));
+
+  })
+
+
+  //
+  //
+  // purchase.addEventListener("click" , function(){
+  //   xhr.open("GET" , "/purchase/");
+  //
+  //   xhr.addEventListener("load" , function(req,res){
+  //     buyCheck.innerHtml = xhr.responseText;
+  //
+  //
+  //   })
+  //
+  //   xhr.send()
+  //
+  //
+  // })
+
+  </script>
   </body>
 </html>

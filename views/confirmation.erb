@@ -1,41 +1,6 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta charset="UTF-8">
-  <title>Houses</title>
-</head>
-<body>
-      <!-- Modal -->
-      <div class="modal fade" id="myModal">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title" id="myModalLabel">Congrats! Your purchase went though!</h4>
-            </div>
-            <div class="modal-body">
-              <p>You Bought:</p>
+
+              
               <p>Shirt: <%= shirtInfo.item %></p>
               <p>Quantity: <%= purchaseInfo.quantity %></p>
               <p>Email: <%= customerInfo.email %></p>
-              <form action="/" method="GET">
-                <button>BACK TO HOME</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-  <script type="text/javascript">
-    $(window).load(function(){
-        $('#myModal').modal('show');
-    });
-    </script>
-</body>
-</html>

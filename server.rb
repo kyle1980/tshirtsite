@@ -1,6 +1,12 @@
 require 'pry'
 require 'sinatra'
 require 'sinatra/reloader'
+require 'sinatra/cross_origin'
+
+configure do
+  enable :cross_origin
+end
+
 require_relative './lib/connection'
 require_relative './lib/purchases'
 require_relative './lib/inventory'
@@ -23,17 +29,24 @@ get '/shirt/:id' do
 end
 
 post '/purchased/:id' do
+  puts "purchase attempt"
 
   id = params[:id]
-  email = params["email"]
-  quantity = params["quantity"]
-  # userCheck = shirts_db.execute("SELECT 1 FROM customers WHERE email = ?", params["email"].length > 0)
+  buy_data = JSON.parse(request.body.read)
+
+  email = buy_data["email"]
+  quantity = buy_data["quantity"]
+  name = buy_data["name"]
+  puts buy_data
+
+  # userCheck = shirts_db.execute("SELECT 1 FROM customers WHERE email = ?", email.length > 0)
 
   idCheck = Customers.find_by({email: email})
+
   if idCheck == nil
     customer_hash = {
-      name: params["name"],
-      email: params["email"]
+      name: buy_data["name"],
+      email: buy_data["email"]
     }
 
     Customers.create(customer_hash);
@@ -42,7 +55,7 @@ post '/purchased/:id' do
 
     purchase_hash ={
       shirt_id: id,
-      quantity: params["quantity"],
+      quantity: buy_data["quantity"],
       customer_id: findCustomer.id
     }
     Purchases.create(purchase_hash)
@@ -60,18 +73,18 @@ post '/purchased/:id' do
 
     findShirtData.update(inventory_hash)
 
-    currentPurchase = Purchases.last()
-    shirtInfo = Inventory.find_by(currentPurchase.shirt_id)
-    customerInfo = Customers.find_by(currentPurchase.customer_id)
+    # currentPurchase = Purchases.last()
+    # shirtInfo = Inventory.find_by(currentPurchase.shirt_id)
+    # customerInfo = Customers.find_by(currentPurchase.customer_id)
 
-    erb :confirmation, locals: {purchaseInfo: currentPurchase, shirtInfo: shirtInfo, customerInfo: customerInfo}
+    # erb :confirmation, locals: {purchaseInfo: currentPurchase, shirtInfo: shirtInfo, customerInfo: customerInfo}
 
   elsif idCheck != nil
     findCustomer = Customers.find_by({email: email})
 
     purchase_hash ={
       shirt_id: id,
-      quantity: params["quantity"],
+      quantity: buy_data["quantity"],
       customer_id: findCustomer.id
     }
     Purchases.create(purchase_hash)
@@ -93,6 +106,15 @@ post '/purchased/:id' do
     shirtInfo = Inventory.find_by(currentPurchase.shirt_id)
     customerInfo = Customers.find_by(currentPurchase.customer_id)
 
+    # erb :confirmation, locals: {purchaseInfo: currentPurchase, shirtInfo: shirtInfo, customerInfo: customerInfo}
+
+
+    currentPurchase = Purchases.last()
+    shirtInfo = Inventory.find_by(currentPurchase.shirt_id)
+    customerInfo = Customers.find_by(currentPurchase.customer_id)
+    # puts currentPurchase
+    # puts shirtInfo
+    # puts currentInfo
     erb :confirmation, locals: {purchaseInfo: currentPurchase, shirtInfo: shirtInfo, customerInfo: customerInfo}
   end
 end
@@ -144,4 +166,16 @@ post '/createItem' do
   Inventory.create(inventory_hash)
 
   redirect '/admin'
+end
+
+get '/purchase' do
+  puts "purchase confirm attempt"
+  currentPurchase = Purchases.last()
+  shirtInfo = Inventory.find_by(currentPurchase.shirt_id)
+  customerInfo = Customers.find_by(currentPurchase.customer_id)
+  puts currentPurchase
+  puts shirtInfo
+  puts currentInfo
+  erb :confirmation, locals: {purchaseInfo: currentPurchase, shirtInfo: shirtInfo, customerInfo: customerInfo}
+
 end
