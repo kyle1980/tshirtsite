@@ -18,10 +18,14 @@
             </div>
             <div class="modal-body">
               <p>You Bought:</p>
-              <p>Shirt: <%= shirtInfo.item %></p>
-              <p>Quantity: <%= purchaseInfo.quantity %></p>
-              <p>Email: <%= customerInfo.email %></p>
-              <form action="/" method="GET">
+              <% session[:cart].each do |hash| %>
+              <div class="row">
+                <p>Shirt: <%= hash[:item] %></p>
+                <p>Quantity: <%= hash[:quantity] %></p>
+                <p>price: <%= hash[:price].to_i * hash[:quantity].to_i %></p>
+              </div>
+              <% end %>
+              <form action="/clearCart" method="GET">
                 <button>BACK TO HOME</button>
               </form>
             </div>
