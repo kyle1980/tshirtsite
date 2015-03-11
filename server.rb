@@ -1,17 +1,8 @@
 require 'pry'
 require 'sinatra'
 require 'sinatra/reloader'
-<<<<<<< HEAD
-require 'sinatra/cross_origin'
-
-configure do
-  enable :cross_origin
-end
-
-=======
 require 'json'
 require 'bcrypt'
->>>>>>> f96a04a7efb166fff88c0ed35acdc0b4f539040f
 require_relative './lib/connection'
 require_relative './lib/purchases'
 require_relative './lib/inventory'
@@ -33,8 +24,12 @@ get '/' do
   if session[:valid_user] == true
     erb :index, locals: { inventory: Inventory.all() }
   else
-    erb :auth
+    erb :signup
   end
+end
+
+get '/loginPage' do
+  erb :login
 end
 
 post '/login' do
@@ -52,40 +47,11 @@ post '/login' do
     end
   end
 
-<<<<<<< HEAD
-post '/purchased/:id' do
-  puts "purchase attempt"
-
-  id = params[:id]
-  buy_data = JSON.parse(request.body.read)
-
-  email = buy_data["email"]
-  quantity = buy_data["quantity"]
-  name = buy_data["name"]
-  puts buy_data
-
-  # userCheck = shirts_db.execute("SELECT 1 FROM customers WHERE email = ?", email.length > 0)
-
-  idCheck = Customers.find_by({email: email})
-
-  if idCheck == nil
-    customer_hash = {
-      name: buy_data["name"],
-      email: buy_data["email"]
-    }
-
-    Customers.create(customer_hash);
-
-    findCustomer = Customers.find_by({email: email})
-
-    purchase_hash ={
-      shirt_id: id,
-      quantity: buy_data["quantity"],
-      customer_id: findCustomer.id
-    }
-    Purchases.create(purchase_hash)
-=======
   redirect '/'
+end
+
+get '/signUpPage' do
+  erb :signup
 end
 
 post '/signup' do
@@ -93,6 +59,12 @@ post '/signup' do
   password = params["password"]
   confirmPassword = params["confirm_password"]
   email = params["email"]
+  fullName = params["fullName"]
+  phone = params["phone"]
+  address = params["address"]
+  city = params["city"]
+  state = params["state"]
+  zip = params["zip"]
 
   if password == confirmPassword
     my_password = BCrypt::Password.create(params["password"])
@@ -100,7 +72,13 @@ post '/signup' do
     customer_hash = {
         name: username,
         password: my_password,
-        email: email
+        email: email,
+        fullName: fullName,
+        phone: phone,
+        address: address,
+        city: city,
+        state: state,
+        zip: zip
       }
     Customer.create(customer_hash);
     session[:valid_user] = true
@@ -111,7 +89,6 @@ post '/signup' do
     redirect 'login'
   end
 end
->>>>>>> f96a04a7efb166fff88c0ed35acdc0b4f539040f
 
 get '/shirt/:id' do
   id = params[:id]
@@ -122,8 +99,10 @@ end
 post '/addToCart/:id' do
   shirt_id = params[:id]
   quantity = params["quantity"]
+  username = session[:username]
   selectedShirt = Inventory.find(shirt_id)
-  cartHash = {shirt_id: shirt_id, item: selectedShirt.item, price: selectedShirt.price, quantity: quantity}
+  customer = Customer.find_by({name: username})
+  cartHash = {shirt_id: shirt_id, item: selectedShirt.item, price: selectedShirt.price, quantity: quantity, customer_id: customer.id}
   cart = session[:cart]
   cart.push(cartHash)
   redirect '/'
@@ -141,19 +120,11 @@ get '/deleteCartItem/:id' do
   erb :cart
 end
 
-<<<<<<< HEAD
-    # currentPurchase = Purchases.last()
-    # shirtInfo = Inventory.find_by(currentPurchase.shirt_id)
-    # customerInfo = Customers.find_by(currentPurchase.customer_id)
-
-    # erb :confirmation, locals: {purchaseInfo: currentPurchase, shirtInfo: shirtInfo, customerInfo: customerInfo}
-=======
 get '/clearCart' do
   session[:cart].clear
   redirect '/'
 end
 
->>>>>>> f96a04a7efb166fff88c0ed35acdc0b4f539040f
 
 
 post '/purchase' do
@@ -162,15 +133,9 @@ post '/purchase' do
   cart = session[:cart]
   cart.each do |hash|
     purchase_hash ={
-<<<<<<< HEAD
-      shirt_id: id,
-      quantity: buy_data["quantity"],
-      customer_id: findCustomer.id
-=======
       shirt_id: hash[:shirt_id],
       quantity: hash[:quantity],
-      customer_id: customer_id
->>>>>>> f96a04a7efb166fff88c0ed35acdc0b4f539040f
+      customer_id: hash[:customer_id]
     }
     Purchase.create(purchase_hash)
     findShirtData = Inventory.find_by({id: hash[:shirt_id]})
@@ -182,62 +147,10 @@ post '/purchase' do
         url: findShirtData.url
       }
     findShirtData.update(inventory_hash)
-<<<<<<< HEAD
-
-    currentPurchase = Purchases.last()
-    shirtInfo = Inventory.find_by(currentPurchase.shirt_id)
-    customerInfo = Customers.find_by(currentPurchase.customer_id)
-
-    # erb :confirmation, locals: {purchaseInfo: currentPurchase, shirtInfo: shirtInfo, customerInfo: customerInfo}
-
-
-    currentPurchase = Purchases.last()
-    shirtInfo = Inventory.find_by(currentPurchase.shirt_id)
-    customerInfo = Customers.find_by(currentPurchase.customer_id)
-    # puts currentPurchase
-    # puts shirtInfo
-    # puts currentInfo
-    erb :confirmation, locals: {purchaseInfo: currentPurchase, shirtInfo: shirtInfo, customerInfo: customerInfo}
-=======
->>>>>>> f96a04a7efb166fff88c0ed35acdc0b4f539040f
   end
 
   erb :confirmation
 end
-
-
-  # id = params[:id]
-  # username = session[:username]
-  # quantity = params["quantity"]
-  #
-  #   findCustomer = Customer.find_by({name: username })
-  #
-  #   purchase_hash ={
-  #     shirt_id: id,
-  #     quantity: params["quantity"],
-  #     customer_id: findCustomer.id
-  #   }
-  #   Purchases.create(purchase_hash)
-  #
-  #   findShirtData = Inventory.find_by({id: id})
-  #
-  #   newQuantity = Integer(findShirtData.quantity) - Integer(quantity)
-  #
-  #   inventory_hash = {
-  #     item: findShirtData.item,
-  #     price: Integer(findShirtData.price),
-  #     quantity: Integer(newQuantity),
-  #     url: findShirtData.url
-  #   }
-  #
-  #   findShirtData.update(inventory_hash)
-  #
-  #   currentPurchase = Purchases.last()
-  #   shirtInfo = Inventory.find_by(currentPurchase.shirt_id)
-  #   customerInfo = Customer.find_by(currentPurchase.customer_id)
-  #
-  #   erb :confirmation, locals: {purchaseInfo: currentPurchase, shirtInfo: shirtInfo, customerInfo: customerInfo}
-# end
 
 get '/admin' do
   erb :admin, locals: {purchases: Purchase.all(), inventory: Inventory.all()}
@@ -285,19 +198,6 @@ post '/createItem' do
   redirect '/admin'
 end
 
-<<<<<<< HEAD
-# get '/purchase' do
-#   puts "purchase confirm attempt"
-#   currentPurchase = Purchases.last()
-#   shirtInfo = Inventory.find_by(currentPurchase.shirt_id)
-#   customerInfo = Customers.find_by(currentPurchase.customer_id)
-#   # puts currentPurchase
-#   # puts shirtInfo
-#   # puts currentInfo
-#   erb :confirmation, locals: {purchaseInfo: currentPurchase, shirtInfo: shirtInfo, customerInfo: customerInfo}
-#
-# end
-=======
 get '/orders' do
   username = session[:username]
   customer = Customer.find_by({name: username})
@@ -308,8 +208,14 @@ get '/orders' do
   erb :orders, locals: {orders: orders }
 end
 
+get '/myAccount' do
+  username = session[:username]
+  info = Customer.find_by({name: username})
+  purchases = info.purchases
+  erb :myAccount, locals: {info: info, purchases: purchases}
+end
+
 get '/logout' do
   session[:valid_user] = false
   redirect '/'
 end
->>>>>>> f96a04a7efb166fff88c0ed35acdc0b4f539040f
